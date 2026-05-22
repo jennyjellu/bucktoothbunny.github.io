@@ -1,4 +1,5 @@
-var score = 0; // Starts your luck score at 0
+var score = 0;
+var isClicking = false; // This tracks if you are actively clicking
 
 function setup() {
   createCanvas(400, 400);
@@ -7,13 +8,20 @@ function setup() {
 function draw() {
   background(220); 
 
-  // Bunny Ears
   stroke(0);
-  fill(255);
+  strokeWeight(1);
+  
+  // Bunny Ears - They turn pink if you are clicking inside the face!
+  if (isClicking) {
+    fill(255, 182, 193); // Pink light-up effect
+  } else {
+    fill(255); // Normal white ears
+  }
   ellipse(150, 70, 60, 120);  // left ear
   ellipse(240, 70, 60, 120);  // right ear
 
   // Bunny Face
+  fill(255);
   ellipse(200, 170, 150, 150); 
 
   // Eyes
@@ -31,21 +39,27 @@ function draw() {
   rect(185, 200, 15, teethsize); 
   rect(200, 200, 15, teethsize); 
 
-  // DISPLAY THE SCORE INSIDE THE CANVAS
-  fill(0); // Black text
+  // Score Text Display
+  fill(0);
   noStroke();
-  textSize(20);
+  textSize(22);
   textAlign(CENTER);
-  text("Exam Luck Score: " + score, 200, 350);
+  text("Exam Luck Score: + " + score, 200, 350);
+  
+  // Reset the pink flash after a few frames
+  if (frameCount % 10 == 0) {
+    isClicking = false;
+  }
 }
 
-// THIS FUNCTION DETECTS CLICKS
+// CRITICAL: The 'P' must be capitalized!
 function mousePressed() {
-  // Calculates the distance between the mouse and the center of the bunny face
+  // Check the distance from mouse to the center of the face (200, 170)
   var d = dist(mouseX, mouseY, 200, 170);
   
-  // If the distance is less than 75 pixels (the radius of the face), it's a hit!
+  // If the click is inside the face radius (75 pixels)
   if (d < 75) {
     score = score + 1;
+    isClicking = true; // Triggers the pink ears effect
   }
 }
